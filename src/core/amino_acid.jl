@@ -1,7 +1,7 @@
 
 using BioSymbols
 
-export AminoAcid, name, three_letter_code, one_letter_code, is_amino_acid
+export AminoAcid, AminoAcidProperties, name, three_letter_code, one_letter_code, is_amino_acid
 
 const AminoAcid = BioSymbols.AminoAcid
 
@@ -25,7 +25,7 @@ const AminoAcidProperties = Dict{AminoAcid, AminoAcidDetails}(
     AA_L => (name="Leucine",        three_letter_code="LEU", one_letter_code="L"),
     AA_K => (name="Lysine",         three_letter_code="LYS", one_letter_code="K"),
     AA_M => (name="Methionine",     three_letter_code="MET", one_letter_code="M"),
-    AA_F => (name="Phenylalanine",  three_letter_code="CYS", one_letter_code="F"),
+    AA_F => (name="Phenylalanine",  three_letter_code="PHE", one_letter_code="F"),
     AA_P => (name="Proline",        three_letter_code="PRO", one_letter_code="P"),
     AA_S => (name="Serine",         three_letter_code="SER", one_letter_code="S"),
     AA_T => (name="Threonine",      three_letter_code="THR", one_letter_code="T"),
