@@ -52,61 +52,61 @@ function add_secondary_structures!(system::System{T}, pdb_path::String) where {T
     end
 end
 
-function add_secondary_structures!(system::System{T}, orig_pdb::ProteinStructure) where {T<:Real} 
-    #TODO write tests, comments, think about different types of helices
-    structure_mapping = Dict(
-        'H'=>SecondaryStructure.HELIX, 
-        'B'=>SecondaryStructure.SHEET, 
-        'E'=>SecondaryStructure.SHEET, 
-        'G'=>SecondaryStructure.HELIX, 
-        'I'=>SecondaryStructure.HELIX, 
-        'P'=>SecondaryStructure.HELIX, 
-        'T'=>SecondaryStructure.NONE, 
-        'S'=>SecondaryStructure.NONE, 
-        ' '=>SecondaryStructure.NONE, 
-        '-'=>SecondaryStructure.NONE)
+# function add_secondary_structures!(system::System{T}, orig_pdb::ProteinStructure) where {T<:Real} 
+#     #TODO write tests, comments, think about different types of helices
+#     structure_mapping = Dict(
+#         'H'=>SecondaryStructure.HELIX, 
+#         'B'=>SecondaryStructure.SHEET, 
+#         'E'=>SecondaryStructure.SHEET, 
+#         'G'=>SecondaryStructure.HELIX, 
+#         'I'=>SecondaryStructure.HELIX, 
+#         'P'=>SecondaryStructure.HELIX, 
+#         'T'=>SecondaryStructure.NONE, 
+#         'S'=>SecondaryStructure.NONE, 
+#         ' '=>SecondaryStructure.NONE, 
+#         '-'=>SecondaryStructure.NONE)
 
-    for chain in eachchain(system)
-        bs_chain = orig_pdb[chain.name]
-        structure_list = []
-        current_structure = nothing
-        start_index = -1
+#     for chain in eachchain(system)
+#         bs_chain = orig_pdb[chain.name]
+#         structure_list = []
+#         current_structure = nothing
+#         start_index = -1
 
-        for residue in bs_chain
-            if(sscode(residue)!=current_structure)
-                # end last ss
-                if(current_structure!==nothing 
-                    && start_index>0 
-                    && structure_mapping[current_structure]!=SecondaryStructure.NONE)
-                    push!(structure_list, (start_index, resnumber(residue)-1, structure_mapping[current_structure]))
-                end
+#         for residue in bs_chain
+#             if(sscode(residue)!=current_structure)
+#                 # end last ss
+#                 if(current_structure!==nothing 
+#                     && start_index>0 
+#                     && structure_mapping[current_structure]!=SecondaryStructure.NONE)
+#                     push!(structure_list, (start_index, resnumber(residue)-1, structure_mapping[current_structure]))
+#                 end
 
-                # start new ss
-                current_structure = sscode(residue)
-                start_index = resnumber(residue)
-            end
-        end
-        # end last structure
-        if(current_structure!==nothing 
-            && start_index>0 
-            && structure_mapping[current_structure]!=SecondaryStructure.NONE)
-            last_residue = chain[lastindex(chain)]
-            push!(structure_list, (start_index, resnumber(last_residue), structure_mapping[current_structure]))
-        end
+#                 # start new ss
+#                 current_structure = sscode(residue)
+#                 start_index = resnumber(residue)
+#             end
+#         end
+#         # end last structure
+#         if(current_structure!==nothing 
+#             && start_index>0 
+#             && structure_mapping[current_structure]!=SecondaryStructure.NONE)
+#             last_residue = chain[lastindex(chain)]
+#             push!(structure_list, (start_index, resnumber(last_residue), structure_mapping[current_structure]))
+#         end
 
-        for fragment in eachfragment(chain)
-            assigned_structure = false
-            for (start_index, end_index, structure) in structure_list
-                if(start_index<=fragment.number && fragment.number<=end_index)
-                    fragment.properties[:SS] = structure
-                    assigned_structure = true
-                end
-            end
-            if(!assigned_structure)
-                fragment.properties[:SS] = SecondaryStructure.NONE
-            end
-        end
-        chain.properties[:SSs] = structure_list
-    end
-    return system
-end
+#         for fragment in eachfragment(chain)
+#             assigned_structure = false
+#             for (start_index, end_index, structure) in structure_list
+#                 if(start_index<=fragment.number && fragment.number<=end_index)
+#                     fragment.properties[:SS] = structure
+#                     assigned_structure = true
+#                 end
+#             end
+#             if(!assigned_structure)
+#                 fragment.properties[:SS] = SecondaryStructure.NONE
+#             end
+#         end
+#         chain.properties[:SSs] = structure_list
+#     end
+#     return system
+# end

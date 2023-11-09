@@ -7,7 +7,6 @@ using BioStructures:
     PDB,
     ProteinStructure,
     resnumber,
-    sscode,
     Model,
     unsafe_addatomtomodel!,
     AtomRecord,
@@ -177,7 +176,7 @@ end
 # TODO: how to handle disordered atoms properly?
 function load_pdb(fname::String, T=Float32)
     # first, read the structure using BioStructures.jl
-    orig_pdb = read(fname, PDB, run_dssp=true)
+    orig_pdb = read(fname, PDB)
     convert(System{T}, orig_pdb)
 end
 
